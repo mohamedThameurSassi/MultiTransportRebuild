@@ -1,0 +1,41 @@
+services:
+  db:
+    image: imresamu/postgis:16-3.6-bookworm
+    platform: linux/arm64
+    container_name: tms-db
+    environment:
+    POSTGRES_DB: ${DB_NAME}
+    POSTGRES_USER: ${DB_USER}
+    POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./scripts/init_db.sql:/docker-entrypoint-initdb.d/01_init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mtsassi -d db_multitransport"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  data:
+    build:
+      context: ./data
+      dockerfile: Dockerfile
+    container_name: tms-data
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: mtsassi
+      DB_PASSWORD: motdepasse
+      DB_NAME: db_multitransport
+      PYTHONPATH: /app
+    volumes:
+      - ./data:/app
+    depends_on:
+      db:
+        condition: service_healthy
+    command: tail -f /dev/null
+
+volumes:
+  pgdata:
