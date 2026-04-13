@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import java.util.Map;
 
 import com.mtsassi.mtl_transit_api.repository.AgencyRepository;
+import com.mtsassi.mtl_transit_api.repository.CalendarDatesRepository;
 import com.mtsassi.mtl_transit_api.repository.CalendarRepository;
 import com.mtsassi.mtl_transit_api.repository.RoutesRepository;
 import com.mtsassi.mtl_transit_api.repository.ShapesRepository;
@@ -14,7 +15,7 @@ import com.mtsassi.mtl_transit_api.repository.StopsRepository;
 import com.mtsassi.mtl_transit_api.repository.StopsTimesRepository;
 import com.mtsassi.mtl_transit_api.repository.TransfersRepository;
 import com.mtsassi.mtl_transit_api.repository.TripsRepository;
-import com.mtsassi.mtl_transit_api.repository.calendarDatesRepository;
+import com.mtsassi.mtl_transit_api.repository.CalendarDatesRepository;
 
 @RestController
 @RequestMapping("/api/v1/test")
@@ -29,7 +30,7 @@ public class TestController {
     private final StopsTimesRepository stopsTimesRepository;
     private final TransfersRepository transfersRepository;
     private final TripsRepository tripsRepository;
-    private final calendarDatesRepository calendarDatesRepo;
+    private final CalendarDatesRepository calendarDatesRepo;
 
     @GetMapping("/counts")
     public Map<String, Long> getCounts() {
