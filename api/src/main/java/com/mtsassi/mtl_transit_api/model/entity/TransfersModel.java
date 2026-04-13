@@ -2,10 +2,12 @@ package com.mtsassi.mtl_transit_api.model.entity;
 
 import org.hibernate.annotations.Collate;
 
+import jakarta.persistence.IdClass;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import jakarta.persistence.Column;
 /*CREATE TABLE IF NOT EXISTS transfers (
@@ -18,6 +20,8 @@ import jakarta.persistence.Column;
 
 @Entity
 @Table(name = "transfers")
+@IdClass(TransfersModel.TransfersId.class)
+@NoArgsConstructor
 @Getter
 @Setter
 public class TransfersModel {
@@ -32,4 +36,10 @@ public class TransfersModel {
     private Integer transferType;
     @Column(name = "min_transfer_time")
     private Integer minTransferTime;
+    
+    @lombok.Data
+    public static class TransfersId implements java.io.Serializable {
+        private String fromStopId;
+        private String toStopId;
+    }
 }

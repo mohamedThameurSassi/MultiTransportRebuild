@@ -1,14 +1,13 @@
 package com.mtsassi.mtl_transit_api.model.entity;
 
-import org.checkerframework.checker.index.qual.SearchIndexBottom;
-import org.checkerframework.checker.units.qual.C;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.locationtech.jts.geom.Point;
 
 /*
 CREATE TABLE IF NOT EXISTS stops (
@@ -24,6 +23,7 @@ CREATE TABLE IF NOT EXISTS stops (
 
 @Entity
 @Table(name = "stops")
+@NoArgsConstructor
 @Getter
 @Setter
 public class StopsModel {
@@ -38,7 +38,7 @@ public class StopsModel {
     private String stopName;
 
     @Column(name = "location", nullable = false)
-    private String location;
+    private Point location;
 
     @Column(name = "location_type", nullable = false)
     private Integer locationType;

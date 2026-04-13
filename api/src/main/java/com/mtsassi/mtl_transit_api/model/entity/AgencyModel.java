@@ -7,6 +7,7 @@ import jakarta.persistence.Table;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 
@@ -14,6 +15,7 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "agencies")
+@NoArgsConstructor
 @Getter
 @Setter
 public class AgencyModel {

@@ -1,10 +1,12 @@
 package com.mtsassi.mtl_transit_api.model.entity;
 
+import jakarta.persistence.IdClass;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /*
@@ -20,16 +22,28 @@ CREATE TABLE IF NOT EXISTS shapes (
 */
 @Entity
 @Table(name = "shapes")
+@IdClass(ShapesModel.ShapesId.class)
+@NoArgsConstructor
 @Getter
 @Setter
 public class ShapesModel {
     @Id
     @Column(name = "shape_id")
     private String shapeId;
-    @Column(name = "shape_pt_lat", nullable = false)
-    private Double shapePtLat;
-    @Column(name = "shape_pt_lon", nullable = false)
-    private Double shapePtLon;
+
+    @Id
     @Column(name = "shape_pt_sequence", nullable = false)
     private Integer shapePtSequence;
+
+    @Column(name = "shape_pt_lat", nullable = false)
+    private Double shapePtLat;
+
+    @Column(name = "shape_pt_lon", nullable = false)
+    private Double shapePtLon;
+
+    @lombok.Data
+    public static class ShapesId implements java.io.Serializable {
+        private String shapeId;
+        private Integer shapePtSequence;
+    }
 }

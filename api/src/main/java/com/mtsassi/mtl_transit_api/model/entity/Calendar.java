@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.time.LocalDate;
 /*/
@@ -26,6 +27,7 @@ CREATE TABLE IF NOT EXISTS calendar (
 
 @Entity
 @Table(name = "calendar")
+@NoArgsConstructor
 @Getter
 @Setter
 public class Calendar {

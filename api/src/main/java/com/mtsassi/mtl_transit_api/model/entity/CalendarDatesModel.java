@@ -5,8 +5,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-
+import java.time.LocalDate;
 /*
 
 CREATE TABLE IF NOT EXISTS calendar_dates (
@@ -17,6 +18,7 @@ CREATE TABLE IF NOT EXISTS calendar_dates (
 ); */
 @Entity
 @Table(name = "calendar_dates")
+@NoArgsConstructor
 @Getter
 @Setter
 public class CalendarDatesModel {
@@ -24,7 +26,7 @@ public class CalendarDatesModel {
     @Column(name = "service_id")
     private String serviceId;
     @Column(name = "date", nullable = false)
-    private String date;
+    private LocalDate date;
     @Column(name = "exception_type", nullable = false)
     private Integer exceptionType;
 }

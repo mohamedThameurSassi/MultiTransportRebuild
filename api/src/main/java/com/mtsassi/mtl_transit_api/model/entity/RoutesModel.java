@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /*
@@ -20,6 +21,7 @@ CREATE TABLE IF NOT EXISTS routes (
 
 @Entity
 @Table(name = "routes")
+@NoArgsConstructor
 @Getter
 @Setter
 public class RoutesModel {

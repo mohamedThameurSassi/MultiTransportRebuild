@@ -50,7 +50,7 @@ def insert_data(statusdict, infodict):
         for station_id, info in infodict.items():
             status = statusdict.get(station_id, {})
             query = """
-                INSERT INTO bixi_stations (station_id, name, location, capacity, bikes_available, ebikes_available, num_docks_available, last_updated)
+                INSERT INTO bixi_stations (station_id, name, location, capacity, bikes_available, ebikes_available, docks_available, last_updated)
                 VALUES (%s, %s, ST_SetSRID(ST_MakePoint(%s, %s), 4326), %s, %s, %s, %s, to_timestamp(%s))
                 ON CONFLICT (station_id) DO UPDATE SET
                     name = EXCLUDED.name,
@@ -58,7 +58,7 @@ def insert_data(statusdict, infodict):
                     capacity = EXCLUDED.capacity,
                     bikes_available = EXCLUDED.bikes_available,
                     ebikes_available = EXCLUDED.ebikes_available,
-                    num_docks_available = EXCLUDED.num_docks_available,
+                    docks_available = EXCLUDED.docks_available,
                     last_updated = EXCLUDED.last_updated;
             """
             cursor.execute(query, (
@@ -67,9 +67,9 @@ def insert_data(statusdict, infodict):
                 info['lat'],
                 info['lon'],
                 info['capacity'],
-                status.get('num_bikes_available', 0),
-                status.get('num_ebikes_available', 0),
-                status.get('num_docks_available', 0),
+                status.get('bikes_available', 0),
+                status.get('ebikes_available', 0),
+                status.get('docks_available', 0),
                 status.get('last_reported', 0)
             ))
         conn.commit()
