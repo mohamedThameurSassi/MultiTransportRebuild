@@ -44,6 +44,7 @@ public class TestController {
                 "transfers", transfersRepository.count(),
                 "trips", tripsRepository.count(),
                 "calendarDates", calendarDatesRepo.count()
+            
         );
     }
 }
