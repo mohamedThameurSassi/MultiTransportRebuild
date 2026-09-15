@@ -1,6 +1,11 @@
 -- Enable PostGIS
 CREATE EXTENSION IF NOT EXISTS postgis;
 
++-- Enable trigram text search
++CREATE EXTENSION IF NOT EXISTS pg_trgm;
+-- Enable trigram text search
+CREATE EXTENSION IF NOT EXISTS pg_trgm;
+
 -- ══════════════════════════════════════════
 -- GTFS Core Tables
 -- ══════════════════════════════════════════
@@ -105,10 +110,13 @@ CREATE TABLE IF NOT EXISTS bixi_stations (
 -- ══════════════════════════════════════════
 
 CREATE INDEX IF NOT EXISTS idx_stops_location ON stops USING GIST(location);
+CREATE INDEX IF NOT EXISTS idx_stops_name_trgm
+    ON stops USING GIN (stop_name gin_trgm_ops);
 CREATE INDEX IF NOT EXISTS idx_bixi_stations_location ON bixi_stations USING GIST(location);
 CREATE INDEX IF NOT EXISTS idx_stop_times_stop ON stop_times(stop_id);
 CREATE INDEX IF NOT EXISTS idx_stop_times_trip ON stop_times(trip_id);
 CREATE INDEX IF NOT EXISTS idx_stop_times_departure ON stop_times(departure_time);
 CREATE INDEX IF NOT EXISTS idx_trips_route ON trips(route_id);
 CREATE INDEX IF NOT EXISTS idx_trips_service ON trips(service_id);
+CREATE INDEX IF NOT EXISTS idx_routes_type ON routes(route_type);
 CREATE INDEX IF NOT EXISTS idx_routes_type ON routes(route_type);

@@ -35,7 +35,6 @@ public class TransitGraphLoader {
     public void loadGraph(){
         System.out.println("Starting to load transit graph into memory...");
         
-        // 1. Load Stops
         stopsRepository.findAll().forEach(stopModel -> {
             RaptorStop raptorStop  = new RaptorStop();
             raptorStop.setStopId(stopModel.getStopId());
@@ -44,7 +43,6 @@ public class TransitGraphLoader {
             graphStore.getStops().put(raptorStop.getStopId(), raptorStop);
         });
 
-        // 2. Load Transfers
         transfersRepository.findAll().forEach(transferModel -> {
             RaptorTransfer raptorTransfer = new RaptorTransfer();
             raptorTransfer.setDestinationId(transferModel.getToStopId());
@@ -55,8 +53,6 @@ public class TransitGraphLoader {
             }
         });
 
-        // 3. Load all StopTimes and Group by TripId
-        // Using pagination to avoid OutOfMemory errors when loading millions of rows
         System.out.println("Loading StopTimes in batches...");
         Map<String, List<StopTimesModel>> stopTimesByTrip = new HashMap<>();
         int page = 0;
@@ -74,13 +70,10 @@ public class TransitGraphLoader {
             }
         } while (stopTimesPage.hasNext());
 
-        // Sort each trip's stop times purely by stop sequence
         stopTimesByTrip.values().forEach(list -> 
             list.sort(Comparator.comparingInt(StopTimesModel::getStopSequence))
         );
 
-        // 4. Load all Trips and create RaptorRoutes
-        // A RaptorRoute is a unique sequence of stops for a GTFS route (a Route Pattern)
         System.out.println("Processing Trips and generating RaptorRoutes (Patterns)...");
         List<TripsModel> allTrips = tripsRepository.findAll();
         
@@ -94,12 +87,10 @@ public class TransitGraphLoader {
                 continue;
             }
 
-            // Extract the sequence of stop IDs
             List<String> stopSequence = tripStopTimes.stream()
                     .map(StopTimesModel::getStopId)
                     .collect(Collectors.toList());
 
-            // Generate a unique ID for this specific route pattern
             String routePatternId = tripModel.getRouteId() + "_" + stopSequence.hashCode();
 
             RaptorRoute raptorRoute = raptorRoutes.computeIfAbsent(routePatternId, k -> {
@@ -107,9 +98,6 @@ public class TransitGraphLoader {
                 newRoute.setPatternId(routePatternId);
                 newRoute.setStopIds(stopSequence);
                 newRoute.setTrips(new ArrayList<>());
-                
-                // For a newly created route pattern, we update the stops
-                // so they know this new RaptorRoute visits them
                 for (String stopId : stopSequence) {
                     RaptorStop stop = graphStore.getStops().get(stopId);
                     if (stop != null) {
@@ -122,7 +110,6 @@ public class TransitGraphLoader {
                 return newRoute;
             });
 
-            // Create the RaptorTrip and attach it to the route
             RaptorTrip raptorTrip = new RaptorTrip();
             raptorTrip.setTripId(tripId);
             List<RaptorTrip.StopTime> raptorStopTimes = new ArrayList<>();
@@ -138,9 +125,7 @@ public class TransitGraphLoader {
             raptorRoute.getTrips().add(raptorTrip);
         }
 
-        // Store the final processed routes in the graph store
         raptorRoutes.values().forEach(route -> {
-            // Sort trips inside the route by their first departure time, helpful for RAPTOR algorithms
             route.getTrips().sort(Comparator.comparingInt(t -> t.getStopTimes().get(0).getDepartureTimeSeconds()));
             graphStore.getRoutes().put(route.getPatternId(), route);
         });

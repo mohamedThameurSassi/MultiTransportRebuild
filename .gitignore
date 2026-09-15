@@ -525,4 +525,12 @@ FodyWeavers.xsd
 *.msm
 *.msp
 
-*.gtfs_stm.zip
+*.gtfs_stm
+/data/app/ingestions/stm/gtfs_stm/
+
+# Gradle caches and generated build files (build/ is ignored above)
+.gradle/
+
+# Local planning notes
+NEXT_STEPS.md
+next_steps.md

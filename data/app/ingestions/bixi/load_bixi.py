@@ -67,9 +67,9 @@ def insert_data(statusdict, infodict):
                 info['lat'],
                 info['lon'],
                 info['capacity'],
-                status.get('bikes_available', 0),
-                status.get('ebikes_available', 0),
-                status.get('docks_available', 0),
+                status.get('num_bikes_available', 0),
+                status.get('num_ebikes_available', 0),
+                status.get('num_docks_available', 0),
                 status.get('last_reported', 0)
             ))
         conn.commit()
